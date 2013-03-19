@@ -24,9 +24,11 @@ public class EntityEnemy extends EntityLiving {
     private EnemyFormation enemyFormation;
     
     private int type;
-    private int direction = 0; //0 - right, 1 - left
-    private long lastMove = 0;
     private int moveDelay = 500;
+    
+    private int shootDelay = 5000;
+    private long lastShoot = 0;
+    private boolean canShoot = false;
     
     private double startX, startY;
     private boolean firstPositionSet = true;
@@ -92,6 +94,16 @@ public class EntityEnemy extends EntityLiving {
         this.loadAnimation();
     }
     
+    private void shoot(int bulletType) {
+        if(this.type == TYPE_BOMBER) {
+            EntityBullet bullet = new EntityBullet(spaceOut, BulletType.BULLET_BOMBER, this);
+            bullet.setVelocityY(-0.5);
+        } else if(this.type == TYPE_SHOOTER) {
+            EntityBullet bullet = new EntityBullet(spaceOut, BulletType.BULLET_SHOOTER, this);
+            bullet.setVelocityY(-0.5);
+        }
+    }
+    
     public void onDeath() {
         EntityBrick brick = new EntityBrick(spaceOut, this.type);
         brick.setPosition(startX, startY);
@@ -100,6 +112,10 @@ public class EntityEnemy extends EntityLiving {
     public void update(int delta) {
         super.update(delta);
 
+        if(System.currentTimeMillis() - this.lastShoot > this.shootDelay) {
+            this.canShoot = true;
+        }
+        
         if (this.isColliding(spaceOut.getBall())) {
             this.playingAnimation = this.animations[ANIM_EXPLODE];
             Sound.killEnemy.play(false);
@@ -114,6 +130,12 @@ public class EntityEnemy extends EntityLiving {
         
         if(lastAnimation == this.animations[ANIM_EXPLODE]) {
             this.kill();
+        }
+        
+        if(this.canShoot) {
+            if(rand.nextInt(60) == 1) {
+                
+            }
         }
     }
 }

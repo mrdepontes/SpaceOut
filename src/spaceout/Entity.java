@@ -5,7 +5,9 @@
 package spaceout;
 
 import java.awt.Rectangle;
-import org.lwjgl.Sys;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.newdawn.slick.*;
 
 /**
@@ -14,6 +16,8 @@ import org.newdawn.slick.*;
  */
 public abstract class Entity {
 
+    Random rand = new Random();
+    
     protected SpaceOut spaceOut;
     protected Animation[] animations;
     protected Animation playingAnimation, lastAnimation;
@@ -87,6 +91,14 @@ public abstract class Entity {
     public Rectangle getBounds() {
         this.boundingBox = new Rectangle((int) this.posX, (int) this.posY, (int) this.width, (int) this.height);
         return this.boundingBox;
+    }
+    
+    public void setSprite(String spriteLoc) {
+        try {
+            this.defaultSprite = new Image(spriteLoc);
+        } catch (SlickException ex) {
+            Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void update(int delta) {
