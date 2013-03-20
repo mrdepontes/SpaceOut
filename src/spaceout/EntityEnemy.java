@@ -94,15 +94,6 @@ public class EntityEnemy extends EntityLiving {
         this.loadAnimation();
     }
     
-    private void shoot(int bulletType) {
-        if(this.type == TYPE_BOMBER) {
-            EntityBullet bullet = new EntityBullet(spaceOut, BulletType.BULLET_BOMBER, this);
-            bullet.setVelocityY(-0.5);
-        } else if(this.type == TYPE_SHOOTER) {
-            EntityBullet bullet = new EntityBullet(spaceOut, BulletType.BULLET_SHOOTER, this);
-            bullet.setVelocityY(-0.5);
-        }
-    }
     
     public void onDeath() {
         EntityBrick brick = new EntityBrick(spaceOut, this.type);
@@ -111,10 +102,6 @@ public class EntityEnemy extends EntityLiving {
 
     public void update(int delta) {
         super.update(delta);
-
-        if(System.currentTimeMillis() - this.lastShoot > this.shootDelay) {
-            this.canShoot = true;
-        }
         
         if (this.isColliding(spaceOut.getBall())) {
             this.playingAnimation = this.animations[ANIM_EXPLODE];
@@ -130,12 +117,6 @@ public class EntityEnemy extends EntityLiving {
         
         if(lastAnimation == this.animations[ANIM_EXPLODE]) {
             this.kill();
-        }
-        
-        if(this.canShoot) {
-            if(rand.nextInt(60) == 1) {
-                
-            }
         }
     }
 }

@@ -17,7 +17,6 @@ import org.newdawn.slick.*;
 public abstract class Entity {
 
     Random rand = new Random();
-    
     protected SpaceOut spaceOut;
     protected Animation[] animations;
     protected Animation playingAnimation, lastAnimation;
@@ -92,13 +91,9 @@ public abstract class Entity {
         this.boundingBox = new Rectangle((int) this.posX, (int) this.posY, (int) this.width, (int) this.height);
         return this.boundingBox;
     }
-    
-    public void setSprite(String spriteLoc) {
-        try {
-            this.defaultSprite = new Image(spriteLoc);
-        } catch (SlickException ex) {
-            Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+    public void setSprite(Image sprite) {
+        defaultSprite = sprite;
     }
 
     public void update(int delta) {

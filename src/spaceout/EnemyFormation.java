@@ -6,6 +6,7 @@ package spaceout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import org.newdawn.slick.Graphics;
 
 /**
@@ -22,6 +23,9 @@ public class EnemyFormation {
     private int moveDelay = 500;
     private long lastMove;
     private boolean moveDirection = false; //false - right, true - left
+    private long lastShoot;
+    private boolean canShoot;
+    private int shootDelay = 5000;
 
     public EnemyFormation(SpaceOut spaceOut) {
         this.spaceOut = spaceOut;
@@ -167,20 +171,46 @@ public class EnemyFormation {
                 enemies.get(i).update(delta);
             }
         }
-        
+
         for (int i = 0; i < bricks.size(); i++) {
             if (!bricks.get(i).isDead) {
                 bricks.get(i).update(delta);
             }
         }
-        
+
         if (enemies.isEmpty() && bricks.isEmpty()) {
             this.createBricks();
-            
+
             EntityBall theBall = spaceOut.getBall();
             theBall.width = 16;
             theBall.height = 16;
         }
+
+        if (!enemies.isEmpty()) {
+            if (System.currentTimeMillis() - this.lastShoot > this.shootDelay) {
+                this.canShoot = true;
+
+                Random rand = new Random();
+                EntityEnemy enemy = enemies.get(rand.nextInt(enemies.size()));
+
+                this.shoot(enemy);
+            }
+        }
+    }
+
+    private void shoot(EntityEnemy enemy) {
+        if (enemy.getType() == EntityEnemy.TYPE_BOMBER) {
+            EntityBullet bullet = new EntityBullet(spaceOut, BulletType.BULLET_BOMBER, enemy);
+            bullet.setPosition(enemy.posX + enemy.width / 2 - bullet.width, enemy.posY + enemy.height);
+            bullet.setVelocityY(0.5);
+        } else if (enemy.getType() == EntityEnemy.TYPE_SHOOTER) {
+            EntityBullet bullet = new EntityBullet(spaceOut, BulletType.BULLET_SHOOTER, enemy);
+            bullet.setPosition(enemy.posX + enemy.width / 2 - bullet.width, enemy.posY + enemy.height);
+            bullet.setVelocityY(0.5);
+        }
+
+        this.lastShoot = System.currentTimeMillis();
+        this.canShoot = false;
     }
 
     public void changeDirection(boolean direction) {
