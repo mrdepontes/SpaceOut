@@ -25,7 +25,7 @@ public class EnemyFormation {
     private boolean moveDirection = false; //false - right, true - left
     private long lastShoot;
     private boolean canShoot;
-    private int shootDelay = 5000;
+    private int shootDelay = 500;
 
     public EnemyFormation(SpaceOut spaceOut) {
         this.spaceOut = spaceOut;

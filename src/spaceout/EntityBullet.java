@@ -30,4 +30,16 @@ public class EntityBullet extends EntityLiving {
         } catch (SlickException e) {
         }
     }
+    
+    public void update(int delta) {
+        super.update(delta);
+        
+        if(this.isColliding(spaceOut.getPlayer())) {
+            EntityPlayer player = spaceOut.getPlayer(); 
+            EffectBulletHit effect = new EffectBulletHit(spaceOut.getFXManager());
+            effect.setPosition(this.posX, player.posY - effect.getHeight());
+            
+            this.kill();
+        }
+    }
 }

@@ -1,10 +1,13 @@
 /*
  * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * and open the template in the editor.aaaaaaaaaaaa
  */
 package spaceout;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Rectangle;
 
 /**
  *
@@ -15,6 +18,7 @@ public class SpaceOut extends BasicGame {
     public static final int HEIGHT = 480;
     
     private EntityManager entityManager;
+    private FXManager fxManager;
     
     private EntityPlayer thePlayer;
     private EntityBall theBall;
@@ -27,6 +31,7 @@ public class SpaceOut extends BasicGame {
         BackgroundMusic.initMusic();
         
         entityManager = new EntityManager(this);
+        fxManager = new FXManager(this);
         
         thePlayer = new EntityPlayer(this);
         thePlayer.setPosition(20, HEIGHT - thePlayer.height - 5);
@@ -39,11 +44,13 @@ public class SpaceOut extends BasicGame {
     
     public void render(GameContainer gc, Graphics g) {
         entityManager.renderEntities(g);
+        fxManager.renderEffects(g);
     }
     
     public void update(GameContainer gc, int delta) {
         this.input(gc);
         entityManager.updateEntities(delta);
+        fxManager.updateEffects(delta);
     }
     
     public void input(GameContainer gc) {
@@ -76,6 +83,10 @@ public class SpaceOut extends BasicGame {
     
     public EntityManager getEntityManager() {
         return this.entityManager;
+    }
+    
+    public FXManager getFXManager() {
+        return this.fxManager;
     }
 
     /**
